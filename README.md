@@ -25,7 +25,7 @@ cd ..
 #--done installing Real-ESRGAN
 
 # our torch nightly probably got nuked by the above, but we do need it for GPU support on macOS
-pip install --pre "torch==1.13.0.dev20220610" --extra-index-url https://download.pytorch.org/whl/nightly/cpu
+pip install --pre "torch==1.13.0.dev20220610" "torchvision==0.14.0.dev20220609" --extra-index-url https://download.pytorch.org/whl/nightly/cpu
 ```
 
 # Run
