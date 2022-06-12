@@ -10,11 +10,11 @@ cd mps-repro
 
 python3 -m venv venv
 source ./venv/bin/activate
+python3 -m pip install --upgrade pip
 
 #--install Real-ESRGAN
 git submodule update --init --recursive
 wget https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth -P Real-ESRGAN/experiments/pretrained_models
-python3 -m pip install --upgrade pip
 # GFPGAN is unnecessarily pinned to an old numpy, for which there is no M1 macOS release. my fork fixes this
 pip install basicsr facexlib git+https://github.com/Birch-san/GFPGAN.git@newer-numpy
 cd Real-ESRGAN
