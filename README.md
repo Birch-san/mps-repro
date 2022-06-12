@@ -13,7 +13,6 @@ source ./venv/bin/activate
 
 #--install Real-ESRGAN
 git submodule update --init --recursive
-git submodule add https://github.com/xinntao/Real-ESRGAN.git
 wget https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth -P Real-ESRGAN/experiments/pretrained_models
 python3 -m pip install --upgrade pip
 # GFPGAN is unnecessarily pinned to an old numpy, for which there is no M1 macOS release. my fork fixes this
