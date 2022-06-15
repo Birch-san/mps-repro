@@ -1,7 +1,7 @@
 import numpy as np
-from numpy import array_equal, vectorize, uint8
+from numpy import vectorize, uint8
 import torch as th
-from torch import tensor
+from torch import tensor, allclose
 import cv2
 
 def choose_colour (row_ix: uint8, col_ix: uint8, _channel_ix: uint8) -> uint8:
@@ -19,10 +19,10 @@ def get_tensor():
   img = th.from_numpy(np.transpose(img, (2, 0, 1))).float()
   return img
 
-def make_img(tensor, device_type):
+def unsqueeze(tensor, device_type):
   return tensor.unsqueeze(0).to(device_type)
 
-canned_tensor = tensor(
+hardcoded_tensor = tensor(
   [[[0.0000, 0.0000, 0.0000],
     [0.0000, 0.4980, 1.0000],
     [0.0000, 1.0000, 1.0000]],
@@ -35,23 +35,17 @@ canned_tensor = tensor(
     [0.0000, 0.4980, 1.0000],
     [0.0000, 1.0000, 1.0000]]])
 
-half = False
-# input_tensor = get_tensor()
-cpu_output = make_img(canned_tensor, 'cpu')
-mps_output = make_img(canned_tensor, 'mps')
-# cpu_output = make_img_unit('cpu')
-# mps_output = make_img_unit('mps').cpu()
-print('cpu_output:\n', cpu_output)
-print('mps_output:\n', mps_output)
-assert array_equal(cpu_output, mps_output), "unsqueezed MPS tensor differs from CPU counterpart"
+unsqueezed_via_cpu = hardcoded_tensor.unsqueeze(0).to('cpu')
+unsqueezed_via_mps = hardcoded_tensor.unsqueeze(0).to('mps').cpu()
+assert allclose(unsqueezed_via_cpu, unsqueezed_via_mps, rtol=0.0001), "unsqueezing the harcoded tensor gives the same result o both CPU and on MPS"
 
-# cpu_output = input.unsqueeze(0).to('cpu')
-# mps_output = input.unsqueeze(0).to('mps')
+computed_tensor = get_tensor()
+print('hardcoded_tensor:\n', hardcoded_tensor)
+print('computed_tensor:\n', computed_tensor)
+assert allclose(computed_tensor, hardcoded_tensor, rtol=0.0001), "the hardcoded tensor is equivalent to the one we compute via get_tensor, so we should get the same result when we unsqueeze it… right?"
 
-# th.save(cpu_output, './out_cpu_repro.pt')
-# th.save(mps_output, './out_mps_repro.pt')
-
-# cpu_roundtrip = th.load('./out_cpu_repro.pt')
-# mps_roundtrip = th.load('./out_mps_repro.pt')
-# assert array_equal(cpu_output.numpy(), mps_output.cpu().numpy()), "unsqueezed MPS tensor differs from CPU counterpart"
-# assert array_equal(cpu_roundtrip, mps_roundtrip), "unsqueezed MPS tensor differs from CPU counterpart"
+unsqueezed_via_cpu = computed_tensor.unsqueeze(0).to('cpu')
+unsqueezed_via_mps = computed_tensor.unsqueeze(0).to('mps').cpu()
+print('unsqueezed_via_cpu:\n', unsqueezed_via_cpu)
+print('unsqueezed_via_mps:\n', unsqueezed_via_mps)
+assert allclose(unsqueezed_via_cpu, unsqueezed_via_mps, rtol=0.0001), "unsqueezed MPS tensor differs from CPU counterpart"
