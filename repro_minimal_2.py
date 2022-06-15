@@ -11,17 +11,18 @@ def choose_colour (row_ix: uint8, col_ix: uint8, _channel_ix: uint8) -> uint8:
     return 255
   return 0
 
-def make_img(device_type):
+def get_tensor():
   img = np.fromfunction(function=vectorize(choose_colour), shape=(3, 3, 3), dtype=uint8)
   img = img.astype(np.float32)
   img = img / 255
   img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
   img = th.from_numpy(np.transpose(img, (2, 0, 1))).float()
-  img = img.unsqueeze(0).to(device_type)
   return img
 
-def make_img_unit(device_type):
-  input = tensor(
+def make_img(tensor, device_type):
+  return tensor.unsqueeze(0).to(device_type)
+
+canned_tensor = tensor(
   [[[0.0000, 0.0000, 0.0000],
     [0.0000, 0.4980, 1.0000],
     [0.0000, 1.0000, 1.0000]],
@@ -33,11 +34,11 @@ def make_img_unit(device_type):
   [[0.0000, 0.0000, 0.0000],
     [0.0000, 0.4980, 1.0000],
     [0.0000, 1.0000, 1.0000]]])
-  return input.unsqueeze(0).to(device_type)
 
 half = False
-cpu_output = make_img('cpu')
-mps_output = make_img('mps').cpu()
+# input_tensor = get_tensor()
+cpu_output = make_img(canned_tensor, 'cpu')
+mps_output = make_img(canned_tensor, 'mps')
 # cpu_output = make_img_unit('cpu')
 # mps_output = make_img_unit('mps').cpu()
 print('cpu_output:\n', cpu_output)
