@@ -1,2 +1,5 @@
+.DS_Store
 /venv/
 /collect_env.py
+/out/
+/out_*

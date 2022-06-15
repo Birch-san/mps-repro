@@ -5,13 +5,55 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python: Run repro",
+      "name": "Python: Run repro (Double, CPU)",
       "type": "python",
       "request": "launch",
       "program": "${workspaceFolder}/repro.py",
       "console": "integratedTerminal",
       "justMyCode": false,
       "args": ["--half_precision_float", "false", "--backend_type", "cpu"]
+    },
+    {
+      "name": "Python: Run repro (Double, GPU)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/repro.py",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "args": ["--half_precision_float", "false", "--backend_type", "mps"]
+    },
+    {
+      "name": "Python: Run repro (Half, GPU)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/repro.py",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "args": ["--half_precision_float", "true", "--backend_type", "mps"]
+    },
+    {
+      "name": "Python: Compare",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/compare.py",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "Python: Repro (minimal)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/repro_minimal.py",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "Python: Repro (minimal 2)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/repro_minimal_2.py",
+      "console": "integratedTerminal",
+      "justMyCode": false
     }
   ]
 }

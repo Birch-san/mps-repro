@@ -2,6 +2,9 @@ import argparse
 from basicsr.archs.rrdbnet_arch import RRDBNet
 from realesrgan import RealESRGANer
 import cv2
+# from cv2 import Mat, CV_8UC3
+import numpy as np
+from numpy import uint8, vectorize # fromfunction ndenumerate
 
 realesrgan_model = RRDBNet(num_in_ch=3, num_out_ch=3, num_feat=64,
                            num_block=23, num_grow_ch=32, scale=4)
@@ -32,7 +35,30 @@ upsampler = RealESRGANer(
     device=args.backend_type
 )
 
-img = cv2.imread('./in.jpg')
+def choose_colour (row_ix: uint8, col_ix: uint8, channel_ix: uint8) -> uint8:
+  if row_ix == 1 and col_ix == 1:
+    return 127
+  elif (row_ix == 2 and col_ix > 0) or (col_ix == 2 and row_ix > 0):
+    return 255
+  return 0
+
+img = np.fromfunction(function=vectorize(choose_colour), shape=(3, 3, 3), dtype=uint8)
+
+# for (row_ix, col_ix, _channel_ix), cell in ndenumerate(img):
+#     if row_ix == 1 and col_ix == 1:
+#       cell[0] = 127
+#       cell[1] = 127
+#       cell[2] = 127
+#     elif (row_ix == 2 and col_ix > 1) or (col_ix == 2 and row_ix > 1):
+#       cell[0] = 255
+#       cell[1] = 255
+#       cell[2] = 255
+cv2.imwrite(f'./out_dbg_{args.backend_type}_half_{str(args.half_precision_float)}.pre.jpg', img)
+
+# img = cv2.imread('./in.jpg')
+
+# def gray(): 
+# array([127, 127, 127], dtype=uint8)
 
 enhanced, _ = upsampler.enhance(img, outscale=2)
-cv2.imwrite(f'./out_{args.backend_type}_half_{str(args.half_precision_float)}.jpg', enhanced)
+cv2.imwrite(f'./out_dbg_{args.backend_type}_half_{str(args.half_precision_float)}.jpg', enhanced)
