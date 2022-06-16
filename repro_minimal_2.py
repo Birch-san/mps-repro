@@ -7,9 +7,6 @@ arr = array([[[0, 0],
         [0, 1]],
 
        [[0, 0],
-        [0, 1]],
-
-       [[0, 0],
         [0, 1]]], dtype=float32)
 
 def get_tensor():
@@ -19,11 +16,9 @@ def get_tensor():
   return img
 
 hardcoded_tensor = tensor([[[[0., 0.],
-          [0., 0.],
           [0., 0.]],
 
          [[0., 1.],
-          [0., 1.],
           [0., 1.]]]])
 
 via_cpu = hardcoded_tensor.to('cpu')
