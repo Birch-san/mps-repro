@@ -21,17 +21,15 @@ hardcoded_tensor = tensor([[[[0., 0.],
          [[0., 1.],
           [0., 1.]]]])
 
-via_cpu = hardcoded_tensor.to('cpu')
 via_mps = hardcoded_tensor.to('mps').cpu()
-assert allclose(via_cpu, via_mps, rtol=0.0001), "expect {hardcoded_tensor -> CPU} == {hardcoded_tensor -> GPU -> CPU}"
+assert allclose(hardcoded_tensor, via_mps, rtol=0.0001), "expect on-CPU hardcoded_tensor == {hardcoded_tensor -> GPU -> CPU}"
 
 computed_tensor = get_tensor()
 print('hardcoded_tensor:\n', hardcoded_tensor)
 print('computed_tensor:\n', computed_tensor)
 assert allclose(computed_tensor, hardcoded_tensor, rtol=0.0001), "expect hardcoded_tensor == get_tensor()"
 
-via_cpu = computed_tensor.to('cpu')
 via_mps = computed_tensor.to('mps').cpu()
-print('via_cpu:\n', via_cpu)
-print('via_mps:\n', via_mps)
-assert allclose(via_cpu, via_mps, rtol=0.0001), "expect {get_tensor() -> CPU} == {get_tensor() -> GPU -> CPU}" # fails!
+print('computed_on_cpu:\n', computed_tensor)
+print('computed_via_mps:\n', via_mps)
+assert allclose(computed_tensor, via_mps, rtol=0.0001), "expect {get_tensor() -> CPU} == {get_tensor() -> GPU -> CPU}" # fails!
