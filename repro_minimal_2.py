@@ -3,17 +3,14 @@ from numpy import float32, array
 import torch as th
 from torch import tensor, allclose
 
-arr = array([[[0.        , 0.        , 0.        ],
-        [0.        , 0.49803922, 1.        ],
-        [0.        , 1.        , 1.        ]],
+arr = array([[[0, 0],
+        [0, 1]],
 
-       [[0.        , 0.        , 0.        ],
-        [0.        , 0.49803922, 1.        ],
-        [0.        , 1.        , 1.        ]],
+       [[0, 0],
+        [0, 1]],
 
-       [[0.        , 0.        , 0.        ],
-        [0.        , 0.49803922, 1.        ],
-        [0.        , 1.        , 1.        ]]], dtype=float32)
+       [[0, 0],
+        [0, 1]]], dtype=float32)
 
 def get_tensor():
   arr_t = np.transpose(arr, (2, 0, 1))
@@ -21,17 +18,13 @@ def get_tensor():
   img = img.unsqueeze(0)
   return img
 
-hardcoded_tensor = tensor([[[0.0000, 0.0000, 0.0000],
-         [0.0000, 0.0000, 0.0000],
-         [0.0000, 0.0000, 0.0000]],
+hardcoded_tensor = tensor([[[[0., 0.],
+          [0., 0.],
+          [0., 0.]],
 
-        [[0.0000, 0.4980, 1.0000],
-         [0.0000, 0.4980, 1.0000],
-         [0.0000, 0.4980, 1.0000]],
-
-        [[0.0000, 1.0000, 1.0000],
-         [0.0000, 1.0000, 1.0000],
-         [0.0000, 1.0000, 1.0000]]])
+         [[0., 1.],
+          [0., 1.],
+          [0., 1.]]]])
 
 via_cpu = hardcoded_tensor.to('cpu')
 via_mps = hardcoded_tensor.to('mps').cpu()
